@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { FaSignOutAlt, FaEnvelope, FaNewspaper, FaHome, FaCog, FaImages } from "react-icons/fa";
+// ADICIONEI O FaInbox AQUI NOS IMPORTS
+import { FaSignOutAlt, FaEnvelope, FaNewspaper, FaHome, FaCog, FaImages, FaInbox } from "react-icons/fa";
 import Link from "next/link";
 
 
@@ -50,23 +51,27 @@ export default function Dashboard() {
 
         <nav className="flex-1 p-4 space-y-2">
 
-          <Link href="/dashboard/instalacoes" className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-white/5 hover:text-white rounded transition-colors">
-          <FaImages /> Instalações
-          </Link>
-          
           <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3 bg-white/10 rounded text-accent font-medium">
             <FaHome /> Visão Geral
           </Link>
+
+          <Link href="/dashboard/instalacoes" className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-white/5 hover:text-white rounded transition-colors">
+            <FaImages /> Instalações
+          </Link>
           
           <Link href="/dashboard/mensagens" className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-white/5 hover:text-white rounded transition-colors">
-            <FaEnvelope /> Mensagens
+            <FaEnvelope /> Mensagens do Site
+          </Link>
+
+          {/* --- NOVO LINK: CAIXA DE E-MAIL --- */}
+          <Link href="/dashboard/emails" className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-white/5 hover:text-white rounded transition-colors">
+            <FaInbox /> Caixa de E-mail
           </Link>
           
           <Link href="/dashboard/posts" className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-white/5 hover:text-white rounded transition-colors">
             <FaNewspaper /> Blog Posts
           </Link>
 
-          {/* Link de Configurações Adicionado */}
           <Link href="/dashboard/configuracoes" className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-white/5 hover:text-white rounded transition-colors">
             <FaCog /> Configurações
           </Link>
@@ -91,20 +96,34 @@ export default function Dashboard() {
         <h1 className="text-2xl font-bold text-gray-800 mb-6">Visão Geral</h1>
 
         {/* Cards de Resumo */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           
-          {/* Card Mensagens */}
+          {/* Card Mensagens (Site) */}
           <Link href="/dashboard/mensagens" className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer group">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm text-gray-500 uppercase font-bold tracking-wider">Mensagens</p>
-                <h3 className="text-3xl font-bold text-primary mt-2">Ver Inbox</h3>
+                <p className="text-sm text-gray-500 uppercase font-bold tracking-wider">Site</p>
+                <h3 className="text-2xl font-bold text-primary mt-2">Mensagens</h3>
               </div>
-              <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <FaEnvelope size={20} />
               </div>
             </div>
-            <p className="text-sm text-gray-400 mt-4">Gerencie os contatos do site</p>
+            <p className="text-sm text-gray-400 mt-4">Do formulário de contato</p>
+          </Link>
+
+          {/* --- NOVO CARD: CAIXA DE E-MAIL --- */}
+          <Link href="/dashboard/emails" className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer group">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-sm text-gray-500 uppercase font-bold tracking-wider">Externo</p>
+                <h3 className="text-2xl font-bold text-primary mt-2">E-mails</h3>
+              </div>
+              <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <FaInbox size={20} />
+              </div>
+            </div>
+            <p className="text-sm text-gray-400 mt-4">Vindos do Outlook/Gmail</p>
           </Link>
 
           {/* Card Blog */}
@@ -112,24 +131,24 @@ export default function Dashboard() {
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm text-gray-500 uppercase font-bold tracking-wider">Blog</p>
-                <h3 className="text-3xl font-bold text-primary mt-2">Gerenciar</h3>
+                <h3 className="text-2xl font-bold text-primary mt-2">Artigos</h3>
               </div>
-              <div className="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <FaNewspaper size={20} />
               </div>
             </div>
-            <p className="text-sm text-gray-400 mt-4">Publique ou edite artigos</p>
+            <p className="text-sm text-gray-400 mt-4">Publique ou edite</p>
           </Link>
 
           {/* Card Atalho Site */}
           <a href="/" target="_blank" className="bg-gradient-to-br from-primary to-gray-800 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer group">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-sm text-accent uppercase font-bold tracking-wider">Site Público</p>
-                <h3 className="text-2xl font-bold mt-2">Acessar Site</h3>
+                <p className="text-sm text-accent uppercase font-bold tracking-wider">Público</p>
+                <h3 className="text-2xl font-bold mt-2">Ver Site</h3>
               </div>
             </div>
-            <p className="text-sm text-gray-300 mt-4 group-hover:text-white">Ver como ficou &rarr;</p>
+            <p className="text-sm text-gray-300 mt-4 group-hover:text-white">Acessar página &rarr;</p>
           </a>
 
         </div>
