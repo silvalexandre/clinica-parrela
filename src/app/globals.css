@@ -1,26 +1,100 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- CONFIGURAÇÕES GLOBAIS --- */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Mantemos as variáveis originais para referência, caso precise usar CSS puro */
+  --primary-navy: #1a202c; 
+  --accent-gold: #c5a47e;   
+  --medical-green: #2d6a4f; 
+  --soft-bg: #f9fafb;       
+  --white: #ffffff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  /* Rolagem suave nativa para links âncora (#sobre, #servicos) */
+  scroll-behavior: smooth;
+  
+  /* IMPORTANTE: Impede que o header fixo tape o conteúdo ao clicar no menu */
+  scroll-padding-top: 120px; 
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  
+  /* Garante que o fundo seja branco e o texto padrão seja o Azul Navy */
+  background-color: var(--white);
+  color: var(--primary-navy);
+  
+  /* Aplica a fonte padrão (Jakarta Sans) definida no layout.tsx */
+  font-family: var(--font-jakarta), sans-serif;
+  
+  /* Melhora a renderização das fontes */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  overflow-x: hidden; /* Evita rolagem horizontal indesejada */
+}
+
+/* --- TIPOGRAFIA --- */
+
+/* Todos os títulos usam a fonte Serif (Playfair Display) automaticamente */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair), serif;
+  font-weight: 700;
+}
+
+p {
+  line-height: 1.8; /* Leitura confortável */
+}
+
+/* --- SCROLLBAR PERSONALIZADA (Toque Premium) --- */
+
+/* Largura da barra */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Fundo da barra */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* A parte que se move (o "polegar") */
+::-webkit-scrollbar-thumb {
+  background: #c5a47e; /* Dourado da marca */
+  border-radius: 5px;
+  border: 2px solid #f1f1f1; /* Espaço entre a barra e o fundo */
+}
+
+/* Hover na barra */
+::-webkit-scrollbar-thumb:hover {
+  background: #b08d66; /* Dourado mais escuro */
+}
+
+/* --- UTILITÁRIOS EXTRAS --- */
+
+/* Classe para garantir que seções tenham espaço extra no topo para o scroll */
+section {
+  scroll-margin-top: 100px;
+}
+
+/* Animações simples globais */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
 }
