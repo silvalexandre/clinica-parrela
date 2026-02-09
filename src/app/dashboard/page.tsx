@@ -45,7 +45,7 @@ export default function Dashboard() {
       {/* --- SIDEBAR (Barra Lateral) --- */}
       <aside className="w-64 bg-primary text-white flex flex-col hidden md:flex">
         <div className="p-6 border-b border-gray-700">
-          <h2 className="font-serif text-xl font-bold">Painel Dr.</h2>
+          <h2 className="font-serif text-xl font-bold">Clinica Parrela</h2>
             {/* AQUI ESTÁ A CORREÇÃO: */}
           <p className="text-xs text-gray-400 mt-1">
             Bem-vindo, {userEmail || 'Doutor(a)'} 
