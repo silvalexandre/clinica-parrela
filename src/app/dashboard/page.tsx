@@ -20,10 +20,10 @@ export default function Dashboard() {
       
       if (!session) {
         // Se não tiver sessão, chuta para o login
-        router.push("/dashboard");
+        router.push("/login");
       } else {
         // Se tiver, libera o acesso
-        setUserEmail(session.user.email || "Dashboard");
+        setUserEmail(session.user.email || "Login");
         setLoading(false);
       }
     };
