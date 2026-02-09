@@ -20,7 +20,7 @@ export default function Dashboard() {
       
       if (!session) {
         // Se não tiver sessão, chuta para o login
-        router.push("/admin");
+        router.push("/dashboard");
       } else {
         // Se tiver, libera o acesso
         setUserEmail(session.user.email || "Admin");
