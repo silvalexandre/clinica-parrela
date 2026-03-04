@@ -1,0 +1,14 @@
+# Ignorar dependências (são muito pesadas e a Vercel instala sozinha)
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Ignorar senhas e variáveis de ambiente (MUITO IMPORTANTE)
+.env
+backend/.env
+frontend/.env
+
+# Ignorar arquivos de log e build
+npm-debug.log
+yarn-error.log
+frontend/build/
