@@ -393,4 +393,4 @@ app.delete('/api/emails/:id', authMiddleware(['super_usuario', 'admin', 'operaci
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Servidor rodando na porta ${PORT}`));
+module.exports = app;

@@ -1,12 +1,13 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: '/api'
+    // Se estiver na Vercel, usa a rota /api. Se estiver no seu PC, usa o localhost.
+    baseURL: process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000/api',
 });
 
-// Interceptor para adicionar o token em todas as requisições
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
+// Interceptor para injetar o Token em todas as requisições
+api.interceptors.request.use(async config => {
+    const token = localStorage.getItem('@Auth:token');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
