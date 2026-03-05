@@ -20,22 +20,33 @@ const PublicHome = () => {
     const loadData = async () => {
         try {
             const configRes = await api.get('/config');
-            if (configRes.data) setConfig(configRes.data);
+            if (configRes.data && !Array.isArray(configRes.data)) setConfig(configRes.data);
 
             const facRes = await api.get('/facilities');
-            setFacilities(facRes.data || []);
+            // BLINDAGEM: Só aceita se for realmente uma lista (Array)
+            if (Array.isArray(facRes.data)) {
+                setFacilities(facRes.data);
+            } else {
+                setFacilities([]);
+            }
 
             const blogRes = await api.get('/blog');
-            if (blogRes.data) setBlogPosts(blogRes.data.slice(0, 3));
+            // BLINDAGEM: Só aceita se for realmente uma lista (Array)
+            if (Array.isArray(blogRes.data)) {
+                setBlogPosts(blogRes.data.slice(0, 3));
+            } else {
+                setBlogPosts([]);
+            }
         } catch (error) {
             console.error("Erro ao carregar dados dinâmicos:", error);
+            setFacilities([]);
+            setBlogPosts([]);
         }
     };
 
-    // useCallback remove os warnings do useEffect no terminal
     const handleNextImage = useCallback((e) => {
         if(e) e.stopPropagation();
-        if(!lightboxImage || facilities.length === 0) return;
+        if(!lightboxImage || !Array.isArray(facilities) || facilities.length === 0) return;
         const currentIndex = facilities.findIndex(item => item.id === lightboxImage.id);
         const nextIndex = (currentIndex + 1) % facilities.length;
         setLightboxImage(facilities[nextIndex]);
@@ -43,7 +54,7 @@ const PublicHome = () => {
 
     const handlePrevImage = useCallback((e) => {
         if(e) e.stopPropagation();
-        if(!lightboxImage || facilities.length === 0) return;
+        if(!lightboxImage || !Array.isArray(facilities) || facilities.length === 0) return;
         const currentIndex = facilities.findIndex(item => item.id === lightboxImage.id);
         const prevIndex = (currentIndex - 1 + facilities.length) % facilities.length;
         setLightboxImage(facilities[prevIndex]);
@@ -107,13 +118,11 @@ const PublicHome = () => {
         }
     };
 
-    // Variáveis com valores padrão caso o painel esteja vazio
     const displayPhone = config.phone || '(38) 99999-9999';
     const displayAddress = config.address || 'R. Santos Dumont, 158 - Centro, Janaúba - MG';
     
-    // Converte o endereço dinâmico para os links do Mapa
-    const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(displayAddress)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
-    const mapGpsUrl = `https://maps.google.com/maps?q=${encodeURIComponent(displayAddress)}`;
+    const mapEmbedUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3824.789156488344!2d-43.30843472529949!3d-15.804153023225883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7509497e883f3e7%3A0x6d8f8a85f67b5f1a!2sR.%20Santos%20Dumont%2C%20158%20-%20Centro%2C%20Jana%C3%BAba%20-%20MG%2C%2039440-000!5e0!3m2!1spt-BR!2sbr!4v1715456789012!5m2!1spt-BR!2sbr?q=${encodeURIComponent(displayAddress)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+    const mapGpsUrl = `https://maps.app.goo.gl/uX3L5jP8zS6w8v8F7?q=${encodeURIComponent(displayAddress)}`;
 
     return (
         <div id="home">
@@ -126,7 +135,6 @@ const PublicHome = () => {
                     <div className="container">
                         <div className="top-bar-info">
                             <span><i className="fas fa-phone"></i> {displayPhone}</span>
-                            {/* CORREÇÃO: Agora renderiza o endereço inteiro sem cortar na vírgula */}
                             <span><i className="fas fa-map-marker-alt"></i> {displayAddress}</span>
                         </div>
                         <div className="top-bar-social">
@@ -216,13 +224,13 @@ const PublicHome = () => {
                         <div className="divider"></div>
                     </div>
                     <div className="facilities-grid">
-                        {facilities.length > 0 ? facilities.map(item => (
+                        {Array.isArray(facilities) && facilities.length > 0 ? facilities.map(item => (
                             <div key={item.id} className="facility-item" onClick={() => setLightboxImage(item)} title="Clique para ampliar">
                                 <img src={item.image_url} alt={item.caption} />
                                 <div className="facility-overlay"><h4>{item.caption}</h4></div>
                             </div>
                         )) : (
-                            <p style={{textAlign:'center', gridColumn:'1/-1', color:'#718096'}}>Nenhuma foto cadastrada.</p>
+                            <p style={{textAlign:'center', gridColumn:'1/-1', color:'#718096'}}>Sincronizando instalações...</p>
                         )}
                     </div>
                 </div>
@@ -248,7 +256,7 @@ const PublicHome = () => {
                     </div>
                     
                     <div className="blog-grid">
-                        {blogPosts.length > 0 ? blogPosts.map(post => (
+                        {Array.isArray(blogPosts) && blogPosts.length > 0 ? blogPosts.map(post => (
                             <article key={post.id} className="blog-card" style={{cursor: 'pointer'}} onClick={() => navigate(`/blog/${post.id}`)}>
                                 <div className="blog-img">
                                     <img src={post.image_url || 'https://via.placeholder.com/400x200?text=Sem+Imagem'} alt={post.title} />
@@ -260,7 +268,7 @@ const PublicHome = () => {
                                 </div>
                             </article>
                         )) : (
-                            <p style={{gridColumn: '1/-1', textAlign: 'center', color: '#718096'}}>Nenhum artigo publicado recentemente.</p>
+                            <p style={{gridColumn: '1/-1', textAlign: 'center', color: '#718096'}}>Sincronizando artigos...</p>
                         )}
                     </div>
 
@@ -287,7 +295,6 @@ const PublicHome = () => {
                             <h3>Visite-nos</h3>
                             <div className="contact-item">
                                 <i className="fas fa-map-marker-alt"></i>
-                                {/* CORREÇÃO: Renderizando o endereço formatado direto */}
                                 <p>{displayAddress}</p>
                             </div>
                             <div className="contact-item"><i className="fas fa-clock"></i><p>Segunda a Sexta<br />08:00 às 17:30</p></div>
