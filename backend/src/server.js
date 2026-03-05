@@ -392,5 +392,11 @@ app.delete('/api/emails/:id', authMiddleware(['super_usuario', 'admin', 'operaci
     }
 });
 
-const PORT = process.env.PORT || 5000;
+// Se não estiver na Vercel (ou seja, está no seu PC), ele liga a porta 5000
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`✅ Servidor rodando localmente na porta ${PORT}`));
+}
+
+// Exporta o app para a Vercel usar a arquitetura Serverless dela
 module.exports = app;
