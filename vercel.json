@@ -19,12 +19,8 @@
       "destination": "/backend/src/server.js"
     },
     {
-      "source": "/(.*\\.(css|js|png|jpg|jpeg|gif|ico|json|txt|svg|woff|woff2|ttf|eot))",
-      "destination": "/frontend/$1"
-    },
-    {
       "source": "/(.*)",
-      "destination": "/frontend/index.html"
+      "destination": "/index.html"
     }
   ]
 }
