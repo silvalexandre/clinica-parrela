@@ -6,7 +6,7 @@ import axios from 'axios';
 const api = axios.create({
     baseURL: window.location.hostname === 'localhost' 
         ? 'http://localhost:5000/api' 
-        : 'https://SEU-PROJETO-BACKEND.vercel.app/api' // <-- ATENÇÃO: Trocaremos isso pela URL real depois!
+        : 'https://clinica-parrela-ftbcqfh8p-alexandres-projects-94c9a50a.vercel.app/api' // <-- ATENÇÃO: Trocaremos isso pela URL real depois!
 });
 
 // O Interceptador: Pega o crachá no bolso (localStorage) e mostra na porta (Header)
