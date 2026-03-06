@@ -1,17 +1,25 @@
 import axios from 'axios';
 
+// A "Mágica" do Deploy: 
+// Se o site estiver rodando no seu computador (localhost), ele usa a porta 5000.
+// Se estiver rodando na internet, ele usa a URL oficial do seu backend na Vercel.
 const api = axios.create({
-    // Se estiver na Vercel, usa a rota /api. Se estiver no seu PC, usa o localhost.
-    baseURL: process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000/api',
+    baseURL: window.location.hostname === 'localhost' 
+        ? 'http://localhost:5000/api' 
+        : 'https://SEU-PROJETO-BACKEND.vercel.app/api' // <-- ATENÇÃO: Trocaremos isso pela URL real depois!
 });
 
-// Interceptor para injetar o Token em todas as requisições
-api.interceptors.request.use(async config => {
-    const token = localStorage.getItem('@Auth:token');
+// O Interceptador: Pega o crachá no bolso (localStorage) e mostra na porta (Header)
+api.interceptors.request.use(config => {
+    const token = window.localStorage.getItem('token');
+    
     if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+        config.headers['Authorization'] = `Bearer ${token}`;
     }
+    
     return config;
+}, error => {
+    return Promise.reject(error);
 });
 
 export default api;

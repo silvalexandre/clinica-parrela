@@ -1,14 +1,16 @@
 const { createClient } = require('@supabase/supabase-js');
-const dotenv = require('dotenv');
-
-dotenv.config();
+require('dotenv').config();
 
 const supabaseUrl = process.env.SUPABASE_URL;
 
-// Tenta usar a SERVICE_KEY (Poder total), se não tiver, usa a KEY normal.
-// Isso garante que o Backend consiga fazer uploads sem ser bloqueado.
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
+// A MÁGICA AQUI: Puxando a chave mestra para ignorar o bloqueio do RLS
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY; 
 
+if (!supabaseUrl || !supabaseKey) {
+    console.error("⚠️ ALERTA: Faltam variáveis do Supabase no arquivo .env!");
+}
+
+// Cria a conexão com poderes de administrador (ignora as regras do RLS)
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 module.exports = supabase;

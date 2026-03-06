@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
+import BlogEditor from './pages/dashboard/BlogEditor';
 
 // Páginas Públicas
 import PublicHome from './pages/PublicHome';
@@ -41,6 +42,7 @@ const App = () => {
                     <Route path="/blog" element={<PublicBlog />} />
                     <Route path="/blog/:id" element={<SinglePost />} />
                     <Route path="/login" element={<Login />} />
+                    
 
                     {/* ROTAS PRIVADAS (ADMIN) */}
                     <Route path="/admin" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
@@ -48,6 +50,8 @@ const App = () => {
                     <Route path="/admin/facilities" element={<PrivateRoute requiredRole="admin"><FacilitiesManager /></PrivateRoute>} />
                     <Route path="/admin/config" element={<PrivateRoute requiredRole="admin"><SiteConfig /></PrivateRoute>} />
                     <Route path="/admin/blog" element={<PrivateRoute requiredRole="admin"><BlogManager /></PrivateRoute>} />
+                    <Route path="/admin/blog/novo" element={<PrivateRoute requiredRole="admin"><BlogEditor /></PrivateRoute>} />
+                    <Route path="/admin/blog/editar/:id" element={<PrivateRoute requiredRole="admin"><BlogEditor /></PrivateRoute>} />
                     <Route path="/admin/messages" element={<PrivateRoute><MessagesAdmin /></PrivateRoute>} />
                     <Route path="/admin/emails" element={<PrivateRoute><EmailsViewer /></PrivateRoute>} />
 
